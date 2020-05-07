@@ -59,6 +59,9 @@ class TestRoweria(unittest.TestCase):
 
         City = WebDriverWait(driver, 45).until(EC.element_to_be_clickable((By.ID, 'client_city'))).send_keys(miasto)
 
+        #przewijam stronę na dół
+        driver.execute_script("window.scrollTo(0, document.body.scrollHeight/3.5);window.scrollTo(0, document.body.scrollHeight/3.7);")
+
         Firsname = WebDriverWait(driver, 45).until(EC.element_to_be_clickable((By.ID, 'client_firstname'))).send_keys(imie)
 
         Surname = WebDriverWait(driver, 45).until(EC.element_to_be_clickable((By.ID, 'client_lastname'))).send_keys(nazwisko)
@@ -77,8 +80,11 @@ class TestRoweria(unittest.TestCase):
 
         akceptacja = WebDriverWait(driver, 45).until(EC.element_to_be_clickable((By.XPATH, '//input[@id="terms_agree"]')))
 
-        #akcept_warunki = driver.find_element_by_xpath('//input[@id="terms_agree"]').click()
+        driver.execute_script("arguments[0].click();", akceptacja)
 
+        #akcept_warunki = driver.find_element_by_xpath('//input[@id="terms_agree"]')
+
+        #drive.execute_script("arguments[0].click();", akcept_warunki)
 
         #ceke debagowe
         time.sleep(8)
