@@ -10,11 +10,11 @@ from selenium.webdriver.support import expected_conditions as EC
 firma = "Kris"
 nip_code = "Krisowy"
 ulica = "Krisowa"
-kod = "56-400"
+kod = "xx"
 miasto = "Olesnica"
 imie = "Krisek"
 nazwisko = "Olo"
-i_majl = "kiko_gmail.com"
+i_majl = "kiko@gmail.com"
 fon = "123456789"
 logyn = "okimoki"
 haslo = "123kokoK456"
@@ -74,20 +74,34 @@ class TestRoweria(unittest.TestCase):
 
         login = WebDriverWait(driver, 45).until(EC.element_to_be_clickable((By.ID, 'client_login'))).send_keys(logyn)
 
-        haslo_1 = WebDriverWait(driver, 45).until(EC.element_to_be_clickable((By.ID, 'client_password'))).send_keys(logyn)
+        haslo_1 = WebDriverWait(driver, 45).until(EC.element_to_be_clickable((By.ID, 'client_password'))).send_keys(haslo)
 
-        haslo_2 = WebDriverWait(driver, 45).until(EC.element_to_be_clickable((By.ID, 'repeat_password'))).send_keys(logyn)
+        haslo_2 = WebDriverWait(driver, 45).until(EC.element_to_be_clickable((By.ID, 'repeat_password'))).send_keys(haslo)
 
         akceptacja = WebDriverWait(driver, 45).until(EC.element_to_be_clickable((By.XPATH, '//input[@id="terms_agree"]')))
 
         driver.execute_script("arguments[0].click();", akceptacja)
 
+        zarejestruj = WebDriverWait(driver, 45).until(EC.element_to_be_clickable((By.XPATH, '//button[@id="submit_clientnew_form"]'))).click()
+
         #akcept_warunki = driver.find_element_by_xpath('//input[@id="terms_agree"]')
 
         #drive.execute_script("arguments[0].click();", akcept_warunki)
+        bledy = driver.find_elements_by_xpath('//div[@class="menu_messages_warning_sub"]/p[text()="Niepoprawny kod pocztowy."]')
+
+        visible_error_noticed = []
+
+        for error in bledy:
+            if error.is_displayed():
+                visible_error_noticed.append(error)
+
+        assert len(visible_error_noticed) == 1
+
+        error_text = visible_error_noticed[0].get_attribute("innerText")
+        assert error_text == "Niepoprawny kod pocztowy."
 
         #ceke debagowe
-        time.sleep(8)
+        time.sleep(5)
 
     def tearDown(self):
         """
